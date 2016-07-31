@@ -174,7 +174,7 @@ set(SOURCE_FILES
   include/marker_with_covariance/marker_with_covariance_visual.h
   include/marker_with_covariance_array/marker_with_covariance_array_display.h
   include/marker_with_covariance_array/marker_with_covariance_array_visual.h
-  
+
   src/marker_detection/marker_detection_display.cpp
   src/marker_detection/marker_detection_visual.cpp
   src/marker_with_covariance/marker_with_covariance_display.cpp

@@ -47,6 +47,14 @@ class Shape;
 namespace marker_rviz_plugin
 {
 
+class MarkerShape {
+public:
+    enum Type {
+        Cube,
+        Marker
+    };
+};
+
 // Declare the visual class for this display.
 class MarkerDetectionVisual
 {
@@ -75,7 +83,7 @@ public:
 
   // Set the shape of the visual, which is an user-editable
   // parameter and therefore don't come from the MarkerDetection message.
-  void setShape( rviz::Shape::Type shape_type );
+  void setShape( MarkerShape::Type shape_type );
 
   // Set the scale of the visual, which is an user-editable
   // parameter and therefore don't come from the MarkerDetection message.
@@ -97,7 +105,7 @@ private:
   Ogre::ColourValue color_;
   
   // The Shape object's shape type
-  rviz::Shape::Type shape_type_;
+  MarkerShape::Type shape_type_;
   
   // The Shape object's scale
   float scale_;

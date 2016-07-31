@@ -53,9 +53,8 @@ MarkerDetectionDisplay::MarkerDetectionDisplay() {
     shape_property_ = new rviz::EnumProperty ( "Shape", QString::fromStdString ( "Cube" ),
             "Shape of the markers.",
             this, SLOT ( updateShape() ) );
-    shape_property_->addOptionStd ( "Cube", rviz::Shape::Cube );
-    shape_property_->addOptionStd ( "Cylinder", rviz::Shape::Cylinder );
-    shape_property_->addOptionStd ( "Sphere", rviz::Shape::Sphere );
+    shape_property_->addOptionStd ( "Cube", MarkerShape::Cube );
+    shape_property_->addOptionStd ( "Marker", MarkerShape::Marker );
 
     scale_property_ = new rviz::FloatProperty ( "Scale", 0.3,
             "Scale of the markers.",
@@ -105,7 +104,7 @@ void MarkerDetectionDisplay::updateColor() {
 
 // Set the current shape for each visual.
 void MarkerDetectionDisplay::updateShape() {
-    rviz::Shape::Type shape_type = ( rviz::Shape::Type ) shape_property_->getOptionInt();
+        MarkerShape::Type shape_type = ( MarkerShape::Type ) shape_property_->getOptionInt();
 
     for ( size_t i = 0; i < visuals_.size(); i++ ) {
         visuals_[ i ]->setShape ( shape_type );
@@ -155,7 +154,7 @@ void MarkerDetectionDisplay::processMessage ( const marker_msgs::MarkerDetection
     visual->setFramePosition ( position );
     visual->setFrameOrientation ( orientation );
     visual->setColor ( color_property_->getOgreColor() );
-    visual->setShape ( ( rviz::Shape::Type ) shape_property_->getOptionInt() );
+    visual->setShape ( ( MarkerShape::Type ) shape_property_->getOptionInt() );
     visual->setScale ( scale_property_->getFloat() );
 
     // And send it to the end of the circular buffer

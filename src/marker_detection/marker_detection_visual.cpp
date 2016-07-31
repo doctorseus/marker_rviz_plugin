@@ -32,6 +32,7 @@
 #include <OGRE/OgreSceneManager.h>
 
 #include "marker_detection/marker_detection_visual.h"
+#include "rviz/ogre_helpers/axes.h"
 
 namespace marker_rviz_plugin {
 
@@ -49,7 +50,7 @@ MarkerDetectionVisual::MarkerDetectionVisual ( Ogre::SceneManager* scene_manager
 
     // initialize global variables
     color_ = Ogre::ColourValue ( 255, 0, 0 );
-    shape_type_ = rviz::Shape::Cube;
+    shape_type_ = MarkerShape::Cube;
     scale_ = 0.0;
 }
 
@@ -69,7 +70,12 @@ void MarkerDetectionVisual::setMessage ( const marker_msgs::MarkerDetection::Con
         double o_z = msg->markers[i].pose.orientation.z;
         double o_w = msg->markers[i].pose.orientation.w;
 
-        markers_[i].reset ( new rviz::Shape ( shape_type_, scene_manager_, frame_node_ ) );
+        if(shape_type_ == MarkerShape::Marker){
+            rviz::Axes *a = new rviz::Axes( scene_manager_, frame_node_ );
+            markers_[i].reset( a->getXShape() );
+        }else{
+            markers_[i].reset ( new rviz::Shape ( rviz::Shape::Cube, scene_manager_, frame_node_ ) );
+        }
         markers_[i]->setColor ( color_ );
         markers_[i]->setPosition ( Ogre::Vector3 ( p_x, p_y, p_z ) );
         markers_[i]->setOrientation ( Ogre::Quaternion ( o_w, o_x, o_y, o_z ) );
@@ -96,12 +102,17 @@ void MarkerDetectionVisual::setColor ( Ogre::ColourValue color ) {
 }
 
 // Shape type is passed through to the Shape object.
-void MarkerDetectionVisual::setShape ( rviz::Shape::Type shape_type ) {
+void MarkerDetectionVisual::setShape ( MarkerShape::Type shape_type ) {
     for ( size_t i = 0; i < markers_.size(); i++ ) {
         Ogre::Vector3 position = markers_[i]->getPosition();
         Ogre::Quaternion orientation = markers_[i]->getOrientation();
 
-        markers_[i].reset ( new rviz::Shape ( shape_type, scene_manager_, frame_node_ ) );
+        if(shape_type == MarkerShape::Marker){
+            rviz::Axes *a = new rviz::Axes( scene_manager_, frame_node_ );
+            markers_[i].reset( a->getXShape() );
+        }else{
+            markers_[i].reset ( new rviz::Shape ( rviz::Shape::Cube, scene_manager_, frame_node_ ) );
+        }
         markers_[i]->setColor ( color_ );
         markers_[i]->setPosition ( position );
         markers_[i]->setOrientation ( orientation );
